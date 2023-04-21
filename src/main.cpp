@@ -95,12 +95,12 @@ bool encrypt_directory(const std::string& dir_path, const std::string& key) {
     for (const auto& entry : std::filesystem::directory_iterator(dir_path)) {
         if (entry.is_directory()) {
             // Recurse into subdirectory
-            if (!encrypt_directory(entry.path(), key)) {
+            if (!encrypt_directory(entry.path().generic_string(), key)) {
                 return false;
             }
         } else if (entry.is_regular_file()) {
             // Encrypt regular file
-            if (!encrypt_file(entry.path(), key)) {
+            if (!encrypt_file(entry.path().generic_string(), key)) {
                 return false;
             }
         }
